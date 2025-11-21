@@ -1,0 +1,241 @@
+/* GLOBAL -------------------------------------------------- */
+
+body {
+    margin: 0;
+    background: #F7F2E9;
+    font-family: 'Poppins', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.safe-area {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Fix Image Responsiveness */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* HEADER -------------------------------------------------- */
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:5px 10px;
+    position:sticky;
+    top:0;
+    z-index:10}
+.brand{
+    display:flex;
+    gap:100%;
+    align-items:center}
+.logo{
+    width:100px;
+    height:60px;
+    margin-left: -10px;
+    object-fit:cover}
+.qr{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    object-fit:cover}
+
+/* HERO -------------------------------------------------- */
+
+.hero-banner {
+    position: relative;
+    margin-top: 0px;
+}
+
+.hero-img {
+    width: 100%;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+    object-fit: cover;
+}
+
+/* FLOATING CARD -------------------------------------------------- */
+
+.floating-card {
+    background: white;
+    width: 90%;
+    margin: -35px auto 0;
+    border-radius: 20px;
+    padding: 18px 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 1001;
+}
+
+
+.floating-card h3 {
+    margin: 0 0 0;
+    font-size: 17px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stats .item {
+    text-align: center;
+}
+
+.stats .value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 5px;
+}
+
+
+/* CATEGORY GRID -------------------------------------------------- */
+
+.category-row {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 18px;
+    text-align: center;
+    gap: 12px;
+}
+
+.cat img {
+    width: 40px;
+}
+
+.cat p {
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+/* TITLE -------------------------------------------------- */
+
+.section-title h2 {
+    margin: 28px 18px 12px;
+    font-size: 19px;
+}
+.section-title h3 {
+    margin: 10px 25px 12px;
+    font-size: 15px;
+}
+
+/* HORIZONTAL MENU CAROUSEL -------------------------------------------------- */
+
+.horizontal-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0 18px 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin-left: 10px;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.menu-card {
+    min-width: 150px;
+    background: white;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    scroll-snap-align: start;
+}
+
+.menu-card img {
+    width: 100%;
+    height: 100px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.menu-card h4 {
+    margin: 8px 0 2px;
+}
+
+.menu-card p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* BOTTOM NAVIGATION -------------------------------------------------- */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 10px;
+    border-top: 2px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 5px 15px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.nav-item:hover {
+    background: #f7f2e9;
+}
+
+.nav-item .icon {
+    font-size: 20px;
+}
+
+.nav-item .label {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.safe-area {
+    padding-bottom: 80px;
+}
+
+/* RESPONSIVE TUNING -------------------------------------------------- */
+
+@media (min-width: 480px) {
+    .floating-card {
+        width: 85%;
+    }
+
+    .hero-img {
+        height: 260px;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Tablet mode */
+    .category-row {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .hero-img {
+        height: 300px;
+    }
+}

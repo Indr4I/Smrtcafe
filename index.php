@@ -1,3 +1,41 @@
+<?php
+session_start();
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+include 'db_config.php';
+
+// Calculate cart count
+$cart_count = 0;
+if (isset($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cart_count += $item['qty'];
+    }
+}
+
+// Handle add to cart
+if(isset($_POST['add_to_cart'])){
+    $menu_id = $_POST['menu_id'];
+    $query = mysqli_query($conn,"SELECT id, name, price FROM menu WHERE id = '$menu_id'");
+    if($item = mysqli_fetch_assoc($query)){
+        // Check if item already in cart
+        $found = false;
+        foreach ($_SESSION['cart'] as &$cart_item) {
+            if ($cart_item['id'] == $item['id']) {
+                $cart_item['qty']++;
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $_SESSION['cart'][] = ['id' => $item['id'], 'name' => $item['name'], 'price' => $item['price'], 'qty' => 1];
+        }
+    }
+    header("Location: index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +52,12 @@
      <header>
       <div class="topbar">
         <div class="brand">
-            <a href="#">
+            <a href="index.php">
             <img src="assets/icon.png" alt="Logo" class="logo" />
             </a>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-            <a href="#">
+            <a href="qr_scans.php">
             <img src="assets/qr-icon.png" alt="qr" class="qr" />
             </a>
         </div>
@@ -45,23 +83,23 @@
     </section>
 
     <div class="horizontal-scroll">
-        <div class="menu-card">
-            <img src="assets/food1.jpg">
-            <h4>Latte</h4>
-            <p>Mulai 18k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food2.jpg">
-            <h4>Mocha</h4>
-            <p>Mulai 22k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food3.jpg">
-            <h4>Americano</h4>
-            <p>Mulai 15k</p>
-        </div>
+        <?php
+        $stmt = $conn->prepare("SELECT id, name, price, image FROM menu WHERE category = 'minuman'");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($item = $result->fetch_assoc()) {
+            echo '<div class="menu-card">';
+            echo '<img src="' . htmlspecialchars($item['image']) . '">';
+            echo '<h4>' . htmlspecialchars($item['name']) . '</h4>';
+            echo '<p>Mulai ' . number_format($item['price'], 0, ',', '.') . 'k</p>';
+            echo '<form method="post" style="display: inline;">';
+            echo '<input type="hidden" name="menu_id" value="' . $item['id'] . '">';
+            echo '<button type="submit" name="add_to_cart">Add to Cart</button>';
+            echo '</form>';
+            echo '</div>';
+        }
+        $stmt->close();
+        ?>
     </div>
 
     <section class="section-title">
@@ -69,24 +107,20 @@
     </section>
 
     <div class="horizontal-scroll">
-
-        <div class="menu-card">
-            <img src="assets/food1.jpg">
-            <h4>Latte</h4>
-            <p>Mulai 18k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food2.jpg">
-            <h4>Mocha</h4>
-            <p>Mulai 22k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food3.jpg">
-            <h4>Americano</h4>
-            <p>Mulai 15k</p>
-        </div>
+        <?php
+        $query = mysqli_query($conn,"SELECT id, name, price, image FROM menu WHERE category = 'makanan'");
+        while ($item = mysqli_fetch_assoc($query)) {
+            echo '<div class="menu-card">';
+            echo '<img src="' . htmlspecialchars($item['image']) . '">';
+            echo '<h4>' . htmlspecialchars($item['name']) . '</h4>';
+            echo '<p>Mulai ' . number_format($item['price'], 0, ',', '.') . 'k</p>';
+            echo '<form method="post" style="display: inline;">';
+            echo '<input type="hidden" name="menu_id" value="' . $item['id'] . '">';
+            echo '<button type="submit" name="add_to_cart">Add to Cart</button>';
+            echo '</form>';
+            echo '</div>';
+        }
+        ?>
     </div>
 
     <section class="section-title">
@@ -94,24 +128,20 @@
     </section>
 
     <div class="horizontal-scroll">
-
-        <div class="menu-card">
-            <img src="assets/food1.jpg">
-            <h4>Latte</h4>
-            <p>Mulai 18k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food2.jpg">
-            <h4>Mocha</h4>
-            <p>Mulai 22k</p>
-        </div>
-
-        <div class="menu-card">
-            <img src="assets/food3.jpg">
-            <h4>Americano</h4>
-            <p>Mulai 15k</p>
-        </div>
+        <?php
+        $query = mysqli_query($conn,"SELECT id, name, price, image FROM menu WHERE category = 'dessert'");
+        while ($item = mysqli_fetch_assoc($query)) {
+            echo '<div class="menu-card">';
+            echo '<img src="' . htmlspecialchars($item['image']) . '">';
+            echo '<h4>' . htmlspecialchars($item['name']) . '</h4>';
+            echo '<p>Mulai ' . number_format($item['price'], 0, ',', '.') . 'k</p>';
+            echo '<form method="post" style="display: inline;">';
+            echo '<input type="hidden" name="menu_id" value="' . $item['id'] . '">';
+            echo '<button type="submit" name="add_to_cart">Add to Cart</button>';
+            echo '</form>';
+            echo '</div>';
+        }
+        ?>
     </div>
 
 </div>
@@ -125,11 +155,19 @@
             <span class="icon">🥤</span>
             <span class="label">Minuman</span>
         </a>
+        <a href="dessert.php" class="nav-item">
+            <span class="icon">🍰</span>
+            <span class="label">Dessert</span>
+        </a>
         <a href="cart.php" class="nav-item">
             <span class="icon">🛒</span>
+            <?php if ($cart_count > 0): ?>
+                <span class="cart-notification"><?php echo $cart_count; ?></span>
+            <?php endif; ?>
             <span class="label">Cart</span>
         </a>
     </nav>
 </div>
+
 </body>
 </html>

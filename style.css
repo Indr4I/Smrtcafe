@@ -120,6 +120,12 @@ img {
 }
 
 /* TITLE -------------------------------------------------- */
+.title h1 {
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+    margin: -80px 15px 10px;
+}
 
 .section-title h2 {
     margin: 28px 18px 12px;
@@ -198,6 +204,7 @@ img {
     padding: 5px 15px;
     border-radius: 8px;
     transition: background 0.2s;
+    position: relative;
 }
 
 .nav-item:hover {
@@ -211,6 +218,20 @@ img {
 .nav-item .label {
     font-size: 12px;
     margin-top: 2px;
+}
+
+.cart-notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 18px;
+    text-align: center;
 }
 
 .safe-area {

@@ -31,7 +31,7 @@ if(isset($_POST['add_to_cart'])){
             $_SESSION['cart'][] = ['id' => $item['id'], 'name' => $item['name'], 'price' => $item['price'], 'qty' => 1];
         }
     }
-    header("Location: makanan.php");
+    header("Location: cart.php");
     exit();
 }
 ?>
@@ -75,12 +75,12 @@ if(isset($_POST['add_to_cart'])){
     </div>
     <!-- RECOMMENDED -->
     <section class="section-title">
-        <h2>Makanan</h2>
+        <h2>Dessert</h2>
     </section>
 
     <div class="item-list">
         <?php
-        $stmt = $conn->prepare("SELECT id, name, price, image FROM menu WHERE category = 'makanan'");
+        $stmt = $conn->prepare("SELECT id, name, price, image FROM menu WHERE category = 'dessert'");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($item = $result->fetch_assoc()) {
@@ -101,7 +101,7 @@ if(isset($_POST['add_to_cart'])){
 </div>
 <div>
     <nav class="bottom-nav">
-        <a href="#" class="nav-item">
+        <a href="makanan.php" class="nav-item">
             <span class="icon">🍽️</span>
             <span class="label">Makanan</span>
         </a>
@@ -109,7 +109,7 @@ if(isset($_POST['add_to_cart'])){
             <span class="icon">🥤</span>
             <span class="label">Minuman</span>
         </a>
-        <a href="dessert.php" class="nav-item">
+        <a href="#" class="nav-item">
             <span class="icon">🍰</span>
             <span class="label">Dessert</span>
         </a>

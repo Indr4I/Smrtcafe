@@ -31,7 +31,7 @@ if(isset($_POST['add_to_cart'])){
             $_SESSION['cart'][] = ['id' => $item['id'], 'name' => $item['name'], 'price' => $item['price'], 'qty' => 1];
         }
     }
-    header("Location: cart.php");
+    header("Location: #");
     exit();
 }
 ?>
@@ -42,7 +42,7 @@ if(isset($_POST['add_to_cart'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title>SmartCafe</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 
@@ -90,7 +90,7 @@ if(isset($_POST['add_to_cart'])){
             echo '<p>Mulai ' . number_format($item['price'], 0, ',', '.') . 'k</p>';
             echo '<form method="post" style="display: inline;">';
             echo '<input type="hidden" name="menu_id" value="' . $item['id'] . '">';
-            echo '<button type="submit" name="add_to_cart">Add to Cart</button>';
+            echo '<button type="submit" name="add_to_cart" class="add-to-cart-btn">Add to Cart</button>';
             echo '</form>';
             echo '</div>';
         }

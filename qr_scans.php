@@ -1,6 +1,40 @@
 <?php
 session_start();
 include 'db_config.php';
+
+// Initialize cart if not set
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Calculate cart count
+$cart_count = 0;
+if (isset($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cart_count += $item['qty'];
+    }
+}
+
+if(isset($_POST['add_to_cart'])){
+    $menu_id = $_POST['menu_id'];
+    $query = mysqli_query($conn,"SELECT id, name, price, image FROM menu WHERE id = '$menu_id'");
+    if($item = mysqli_fetch_assoc($query)){
+        // Check if item already in cart
+        $found = false;
+        foreach ($_SESSION['cart'] as &$cart_item) {
+            if ($cart_item['id'] == $item['id']) {
+                $cart_item['qty']++;
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $_SESSION['cart'][] = ['id' => $item['id'], 'name' => $item['name'], 'price' => $item['price'], 'qty' => 1, 'image' => $item['image']];
+        }
+    }
+    header("Location: #");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +43,7 @@ include 'db_config.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Scan - SmartCafe</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 </head>
 <body>
@@ -96,8 +130,15 @@ include 'db_config.php';
             <span class="icon">🥤</span>
             <span class="label">Minuman</span>
         </a>
+        <a href="dessert.php" class="nav-item">
+            <span class="icon">🍰</span>
+            <span class="label">Dessert</span>
+        </a>
         <a href="cart.php" class="nav-item">
             <span class="icon">🛒</span>
+            <?php if ($cart_count > 0): ?>
+                <span class="cart-notification"><?php echo $cart_count; ?></span>
+            <?php endif; ?>
             <span class="label">Cart</span>
         </a>
     </nav>

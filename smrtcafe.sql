@@ -58,7 +58,7 @@ CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `total` int(11) NOT NULL,
-  `status` enum('pending','completed','cancelled') DEFAULT 'pending',
+  `status` enum('pending','paid','completed','cancelled') DEFAULT 'pending',
   `table_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -107,21 +107,23 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_id`, `quantity`, `price`) VAL
 -- Struktur dari tabel `tables`
 --
 
+DROP TABLE IF EXISTS `tables`;
 CREATE TABLE `tables` (
   `id` int(11) NOT NULL,
-  `table_number` varchar(10) NOT NULL
+  `table_number` varchar(10) NOT NULL,
+  `is_occupied` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `tables`
 --
 
-INSERT INTO `tables` (`id`, `table_number`) VALUES
-(1, 'T01'),
-(2, 'T02'),
-(3, 'T03'),
-(4, 'T04'),
-(5, 'T05');
+INSERT INTO `tables` (`id`, `table_number`, `is_occupied`) VALUES
+(1, 'T01', 0),
+(2, 'T02', 0),
+(3, 'T03', 0),
+(4, 'T04', 0),
+(5, 'T05', 0);
 
 --
 -- Indexes for dumped tables

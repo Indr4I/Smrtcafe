@@ -63,8 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->close();
             }
 
-            // Clear cart
+            // Clear cart and table selection
             $_SESSION['cart'] = [];
+            unset($_SESSION['table_id']);
+            unset($_SESSION['table']);
             $_SESSION['last_order_id'] = $order_id;
             header("Location: s_order.php");
             exit();
@@ -145,7 +147,7 @@ foreach ($_SESSION['cart'] as $item) {
                 <button type="submit" name="delete[<?php echo $index; ?>]" class="delete-btn">🗑</button>
             </form>
         </div>
-        <?php endforeach; ?>
+        <?php endforeach; ?>    
     </div>
 
     <!-- table selection -->
@@ -155,24 +157,36 @@ foreach ($_SESSION['cart'] as $item) {
     </section>
 
     <div class="setting-box">
-        <form method="post">
-            <select name="table_id" required>
-                <option value="">Pilih Meja</option>
-                <?php
-                $stmt = $conn->prepare("SELECT id, table_number FROM tables");
-                $stmt->execute();
-                $result = $stmt->get_result();
-                while ($table = $result->fetch_assoc()) {
-                    $selected = (isset($_SESSION['table_id']) && $_SESSION['table_id'] == $table['id']) ? 'selected' : '';
-                    echo '<option value="' . $table['id'] . '" ' . $selected . '>' . htmlspecialchars($table['table_number']) . '</option>';
-                }
-                $stmt->close();
-                ?>
-            </select>
-            <button type="submit" name="select_table" class="btn">Pilih</button>
-        </form>
+        <?php if (isset($_SESSION['table_id'])): ?>
+            <?php
+            // Get table number for display
+            $stmt = $conn->prepare("SELECT table_number FROM tables WHERE id = ?");
+            $stmt->bind_param("i", $_SESSION['table_id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $table = $result->fetch_assoc();
+            $stmt->close();
+            ?>
+            <p>Meja : <?php echo htmlspecialchars($table['table_number']); ?></p>
+        <?php else: ?>
+            <form method="post">
+                <select name="table_id" required>
+                    <option value="">Pilih Meja</option>
+                    <?php
+                    $stmt = $conn->prepare("SELECT id, table_number FROM tables");
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($table = $result->fetch_assoc()) {
+                        echo '<option value="' . $table['id'] . '">' . htmlspecialchars($table['table_number']) . '</option>';
+                    }
+                    $stmt->close();
+                    ?>
+                </select>
+                <button type="submit" name="select_table" class="btn">Pilih</button>
+            </form>
 
-        <a href="qr_scans.php" class="scan-link">📷 Scan QR Code</a>
+            <a href="qr_scans.php" class="scan-link">📷 Scan QR Code</a>
+        <?php endif; ?>
     </div>
 
     <div class="cart-footer">

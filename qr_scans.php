@@ -109,7 +109,9 @@ if(isset($_POST['add_to_cart'])){
         });
         Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 0) {
-                scanner.start(cameras[0]);
+                // Prioritize back camera: use the last camera in the list (often the back camera)
+                let selectedCamera = cameras[cameras.length - 1];
+                scanner.start(selectedCamera);
             } else {
                 document.getElementById('result').innerText = 'No cameras found.';
             }
